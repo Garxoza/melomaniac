@@ -4,7 +4,7 @@ const SpotifyWebApi = require('spotify-web-api-node');
 
 var router = express.Router();
 var artistList = require('../bin/seeds');
-getWrongArtist=require('../helpers/helper');
+var getWrongArtist=require('../helpers/helper');
 
 const clientId = '774af390dd2142dcadfcccc52d3e22c3',
     clientSecret = 'a55a2507b3dc49479367d163f1b48e90';
@@ -33,21 +33,25 @@ function randomTrack(){
 }
 let corRand=randomTrack();
 
-router.get('/random', (req, res, next) => {
-  Promise.all([
+function getOneRandomQuestion(spotifyApi, stack=0) {
+  let corrAnswer=artistList[Math.floor(Math.random()*artistList.length)+1];
+  let wrong1=getWrongArtist();
+  let wrong2=getWrongArtist();
+  let wrong3=getWrongArtist();
+
+  return Promise.all([
     spotifyApi.searchTracks('artist:'+corrAnswer),
     spotifyApi.searchTracks('artist:'+wrong1),
     spotifyApi.searchTracks('artist:'+wrong2),
     spotifyApi.searchTracks('artist:'+wrong3)
-    ])
-  .then(function(arrayData) {
+  ])
+  .then(arrayData =>{
     let data = arrayData[0]
     let data2 = arrayData[1]
     let data3 = arrayData[2]
     let data4 = arrayData[3]
     try {
-        let game = { 
-        questions: [{
+        let question ={
           musicUrl: data.body.tracks.items[corRand].preview_url,
           answers: [{
             answer: corrAnswer+" -- "+ data.body.tracks.items[corRand].name,
@@ -64,47 +68,42 @@ router.get('/random', (req, res, next) => {
             answer: wrong3 + " -- " +data4.body.tracks.items[randomTrack()].name,
             isCorrect: false
           }]
-        }]
-      }
-      // helper.shuffle(game.questions.answers)
-      return Game.create(game)
+        }
+        return question
     }
-    catch(err) {
-      next(err)
-    } 
+    catch (err) {
+      if (stack < 10) {
+        getOneRandomQuestion(spotifyApi, stack+1)
+      }
+      else {
+        throw new Error("getOneRandomQuestion failed 10 times in a row")
+      }
+    }
+  })
+}
+
+
+router.get('/random', (req, res, next) => {
+  let promises = []
+  for (let i = 0; i < 10; i++) {
+    promises.push(getOneRandomQuestion(spotifyApi))
+  }
+  Promise.all(promises)
+  .then(questions => {
+    let game = { 
+      questions: questions
+    }
+    // helper.shuffle(game.questions.answers)
+    return Game.create(game)
   })
   .then(gameCreated => {
     res.json(gameCreated)
   })
   .catch((err) => {
     console.log('Something went wrong!', err);
+    next(err)
   })
-
-  .then(data => {
-    let game = { 
-      questions: [{
-        musicUrl: "",
-        answers: [{
-          answer: "A",
-          isCorrect: true
-        }, {
-          answer: "B",
-          isCorrect: false
-        },
-        {
-          answer: "C",
-          isCorrect: false
-        },
-        {
-          answer: "D",
-          isCorrect: false
-        }]
-      }]
-    }
-    Game.create(game)
-    res.json(data)
-  })
-  .catch(err => next(err))
 });
+
 
 module.exports = router;
