@@ -4,10 +4,9 @@ const { Schema } = mongoose;
 const gameSchema = new mongoose.Schema({  
   questions: [{
     musicUrl: {type: String},
-    // rightAnswer: {type: String},
     answers: [{
-      answer: {type: String},
-      isCorrect: {type: Boolean}
+    answer: {type: String},
+    isCorrect: {type: Boolean}
     }]
   }],
   players: [{

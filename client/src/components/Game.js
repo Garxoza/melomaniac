@@ -2,28 +2,19 @@ import React, { Component } from 'react';
 import axios from "axios";
 import api from '../api';
 import ReactAudioPlayer from 'react-audio-player';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Button, ButtonGroup} from 'reactstrap';
 
 class Game extends Component {
   constructor(props){
     super(props)
     this.state = {
       game: null,
-    //   game:  {
-    //     questions: [{
-    //       musicUrl: {},
-       
-    //     answers: [{
-    //       answer: {},
-    //       isCorrect: {}
-    //     }]
-    //   }],
-    //   players: [{
-    //     _user: {},
-    //     score: {},
-    //     guesses: [{}]
-    //   }]
-    // }
     };
+    this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+  }
+  onRadioBtnClick(rSelected) {
+    this.setState({ rSelected });
   }
   componentDidMount() {
     api.getGame()
@@ -40,8 +31,9 @@ class Game extends Component {
 
     console.log("this is this.state", this.state)
     console.log("this is RENDER")
-    console.log("this is Answer1", this.state.game.questions[0].answers[0].answer)
-  
+    // console.log("this is Answer1", this.state.game.questions[0].answers[0].answer)
+    
+    
     let answer=this.state.game.questions && this.state.game.questions[0].answers[0].answer
     let answer2=this.state.game.questions && this.state.game.questions[0].answers[1].answer
     let answer3=this.state.game.questions && this.state.game.questions[0].answers[2].answer
@@ -53,16 +45,20 @@ class Game extends Component {
     
 
     return (
-      <div className="Game">
+      <div>
         <h2>Random Game</h2>
 
-        {JSON.stringify(answer)}
-
-        <ReactAudioPlayer src={url} controls/> <br/>
-        <button onClick={(e) => this.handleClick(e)}>{answer}</button><br/>
-        <button onClick={(e) => this.handleClick(e)}>{answer2}</button><br/>
-        <button onClick={(e) => this.handleClick(e)}>{answer3}</button><br/>
-        <button onClick={(e) => this.handleClick(e)}>{answer4}</button>
+        <ReactAudioPlayer src={url} controls/> <br/><br/>
+        <Button color="primary" onClick={() => this.onRadioBtnClick(1)} active={this.state.rSelected === 1}>
+          {answer}</Button><br/><br/>
+        <Button color="primary" onClick={() => this.onRadioBtnClick(2)} active={this.state.rSelected === 2}>
+          {answer2}</Button><br/><br/>
+        <Button color="primary" onClick={() => this.onRadioBtnClick(3)} active={this.state.rSelected === 3}>
+          {answer3}</Button><br/><br/>
+        <Button color="primary" onClick={() => this.onRadioBtnClick(4)} active={this.state.rSelected === 4}>
+          {answer4}</Button>
+          <br/><br/>
+          <p>Selected: {this.state.rSelected}</p>
         
         </div>
     );

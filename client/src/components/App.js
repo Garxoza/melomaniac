@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
 import Home from './Home';
-import Countries from './Countries';
-import AddCountry from './AddCountry';
 import Secret from './Secret';
 import Login from './Login';
 import Game from './Game';
 import Signup from './Signup';
 import api from '../api';
-import logo from '../logo.svg';
+// import logo from '../logo.svg';
 import './App.css';
+import {Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 class App extends Component {
   constructor(props) {
@@ -27,28 +26,27 @@ class App extends Component {
   render() {                
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React Countries</h1>
-          <Link to="/">Home</Link> 
-          <Link to="/countries">Countries</Link> 
-          <Link to="/add-country">Add country</Link> 
-          <Link to="/games">Games</Link>
-          {!api.isLoggedIn() && <Link to="/signup">Signup</Link> }
-          {!api.isLoggedIn() && <Link to="/login">Login</Link> }
-          {api.isLoggedIn() && <Link to="/" onClick={(e) => this.handleLogoutClick(e)}>Logout</Link> }
-          <Link to="/secret">Secret</Link> 
-        </header>
-        <Switch>
+      <Navbar className="navbar navbar-expand-sm" color="primary" dark expand="md">
+        <div className="navbar container">
+        <NavbarBrand  href="/">Home</NavbarBrand>
+        <NavbarBrand  href="/games">Games</NavbarBrand>
+        {!api.isLoggedIn() && <NavbarBrand className="ml-auto" href="/signup">Signup</NavbarBrand> }<br/>
+        {!api.isLoggedIn() && <NavbarBrand className="ml-auto" href="/login">Login</NavbarBrand> }<br/>
+        {api.isLoggedIn() && <NavbarBrand href="/" onClick={(e) => this.handleLogoutClick(e)}>Logout</NavbarBrand> }<br/>
+        {/* <NavbarBrand href="/secret">Secret</NavbarBrand> */}
+        </div>
+        </Navbar>        
+           
+                  <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/countries" component={Countries} />
-          <Route path="/add-country" component={AddCountry} />
+
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <Route path="/secret" component={Secret} />
           <Route path="/games" component={Game} />
           <Route render={() => <h2>404</h2>} />
-        </Switch>        
+        </Switch>   
+             
       </div>
     );
   }
