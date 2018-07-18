@@ -6,8 +6,9 @@ import Login from './Login';
 import Game from './Game';
 import Signup from './Signup';
 import api from '../api';
-// import logo from '../logo.svg';
+import logo from '../logo.png';
 import './App.css';
+import '../styles/index.scss';
 import {Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 class App extends Component {
@@ -23,19 +24,24 @@ class App extends Component {
     api.logout()
   }
 
-  render() {                
+  render() {   
+    let user=api.loadUser();
+    console.log("USER is", user);
+                 
     return (
       <div className="App">
       <Navbar className="navbar navbar-expand-sm" color="primary" dark expand="md">
-        <div className="navbar container">
-        <NavbarBrand  href="/">Home</NavbarBrand>
-        <NavbarBrand  href="/games">Games</NavbarBrand>
-        {!api.isLoggedIn() && <NavbarBrand className="ml-auto" href="/signup">Signup</NavbarBrand> }<br/>
-        {!api.isLoggedIn() && <NavbarBrand className="ml-auto" href="/login">Login</NavbarBrand> }<br/>
-        {api.isLoggedIn() && <NavbarBrand href="/" onClick={(e) => this.handleLogoutClick(e)}>Logout</NavbarBrand> }<br/>
-        {/* <NavbarBrand href="/secret">Secret</NavbarBrand> */}
+        <div className="container">
+         <NavbarBrand  href="/"><img src={logo} className="App-logo" alt="logo" /></NavbarBrand>
+         {/* <NavbarBrand  href="/games">Games</NavbarBrand> */}
+         <div className="btn-group btn-group-toggle">
+           {!api.isLoggedIn() && <NavbarBrand className="ml-auto" href="/signup">Signup</NavbarBrand> }<br/>
+           {!api.isLoggedIn() && <NavbarBrand className="ml-auto" href="/login">Login</NavbarBrand> }<br/>        
+           {api.isLoggedIn() && <NavbarBrand href="/secret">{user.name}</NavbarBrand>}<br/>
+           {api.isLoggedIn() && <NavbarBrand href="/" onClick={(e) => this.handleLogoutClick(e)}>Logout</NavbarBrand> }
+         </div>
         </div>
-        </Navbar>        
+      </Navbar>        
            
                   <Switch>
           <Route path="/" exact component={Home} />

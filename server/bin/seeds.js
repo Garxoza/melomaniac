@@ -17,7 +17,6 @@ let artList=[
 "Bruce Springsteen",
 "Marvin Gaye",
 "Sam Cooke",
-"Prince",
 "The Supremes",
 "Pink Floyd",
 "Elton John",
