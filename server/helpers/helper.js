@@ -55,7 +55,7 @@ module.exports = {
       try {
           if (!data.body.tracks.items[corRand].preview_url) throw new Error("No preview_url")
           let question ={
-            musicUrl: data.body.tracks.items[corRand].preview_url,
+            previewUrl: data.body.tracks.items[corRand].preview_url,
             answers: [{
               answer: corrAnswer+" -- "+ data.body.tracks.items[corRand].name,
               isCorrect: true

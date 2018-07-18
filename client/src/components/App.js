@@ -49,7 +49,7 @@ class App extends Component {
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <Route path="/secret" component={Secret} />
-          <Route path="/games" component={Game} />
+          <Route path="/games/:gameId" component={Game} />
           <Route render={() => <h2>404</h2>} />
         </Switch>   
              

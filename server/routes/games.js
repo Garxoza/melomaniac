@@ -1,5 +1,6 @@
 var express = require('express');
-const Game = require('../models/game')
+const Game = require('../models/Game')
+const Song = require('../models/Song')
 const SpotifyWebApi = require('spotify-web-api-node');
 
 var router = express.Router();
@@ -35,7 +36,7 @@ let corRand=randomTrack();
 
 
 
-router.get('/random', (req, res, next) => {
+router.get('/random-old', (req, res, next) => {
   let promises = []
   for (let i = 0; i < 10; i++) {
     promises.push(helper.getOneRandomQuestion(spotifyApi))
@@ -61,6 +62,61 @@ router.get('/random', (req, res, next) => {
     next(err)
   })
 });
+
+
+router.get('/random', (req, res, next) => {
+  Song.find()
+  .then(songs => {
+    songs.sort((a,b) => Math.random()-0.5) // To shuffle
+    console.log(songs.map(song => song.artistName + " --- " + song.name));
+
+    let questions = []
+    let nbOfQuestions = 10
+    for (let i = 0; i < nbOfQuestions; i++) {
+      let answers = [
+        {
+          answer: songs[4*i].artistName + " --- " + songs[4*i].name,
+          "isCorrect": true,
+        },
+        {
+          answer: songs[4*i+1].artistName + " --- " + songs[4*i+1].name,
+          "isCorrect": false,
+        },
+        {
+          answer: songs[4*i+2].artistName + " --- " + songs[4*i+2].name,
+          "isCorrect": false,
+        },
+        {
+          answer: songs[4*i+3].artistName + " --- " + songs[4*i+3].name,
+          "isCorrect": false,
+        }
+      ]
+
+      answers.sort((a,b) => Math.random()-0.5) // To shuffle
+
+      questions.push({
+        previewUrl: songs[4*i].previewUrl,
+        answers
+      })
+    }
+    let game = { 
+      questions: questions
+    }
+    return Game.create(game)
+  })
+  .then(gameCreated => {
+    res.json(gameCreated)
+  })
+  .catch((err) => {
+    console.log('Something went wrong!', err);
+    next(err)
+  })
+});
+
+router.get('/:gameId', (req, res, next) => {
+  Game.findById(req.params.gameId)
+  .then(games => res.json(games))
+})
 
 
 module.exports = router;

@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const gameSchema = new mongoose.Schema({  
   questions: [{
-    musicUrl: {type: String},
+    previewUrl: {type: String},
     answers: [{
     answer: {type: String},
     isCorrect: {type: Boolean}
