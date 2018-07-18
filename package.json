@@ -8,10 +8,5 @@
     "start": "echo --- start --- && cd server && npm start",
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run start"
-  },
-  "dependencies": {
-    "bootstrap": "^4.1.2",
-    "react-audio-player": "^0.10.0",
-    "reactstrap": "^6.3.0"
   }
 }

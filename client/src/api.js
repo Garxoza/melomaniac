@@ -12,7 +12,14 @@ const errHandler = err => {
 export default {
   service: service,
 
-  getGame(){
+  getGame(gameId){
+    return service
+      .get('/games/'+gameId)
+      .then(res => res.data)
+      .catch(errHandler);
+  },
+
+  createGame(){
     return service
       .get('/games/random')
       .then(res => res.data)

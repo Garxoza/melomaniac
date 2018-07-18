@@ -1,5 +1,26 @@
+const mongoose = require('mongoose');
+const SpotifyWebApi = require('spotify-web-api-node');
+const Song = require('../models/Song');
 
-let artList=[
+const NB_OF_SONGS_PER_ARTISTS = 5
+
+require('../configs/database');
+
+const clientId = '774af390dd2142dcadfcccc52d3e22c3',
+    clientSecret = 'a55a2507b3dc49479367d163f1b48e90';
+
+var spotifyApi = new SpotifyWebApi({
+  clientId : clientId,
+  clientSecret : clientSecret
+});
+
+// Retrieve an access token.
+
+
+
+
+
+let artists=[
   "2pac",
   "AC/DC",
   "Adele",
@@ -137,16 +158,47 @@ let artList=[
   "Whitney Houston",
 ]
 
-function uniq(a) {
-  var seen = {};
-  return a.filter(function(item) {
-      return seen.hasOwnProperty(item) ? false : (seen[item] = true);
-  });
+
+function saveSongsFromArtist(iArtist = 0) {
+  spotifyApi.searchTracks('artist:'+artists[iArtist])
+  .then(data => {
+    let promises = []
+    if (data.body.tracks) {
+      for (let iItem = 0; iItem < Math.min(NB_OF_SONGS_PER_ARTISTS, data.body.tracks.items.length); iItem++) {
+        if (data.body.tracks.items[iItem].preview_url) {
+          promises.push(Song.create({
+            previewUrl: data.body.tracks.items[iItem].preview_url,
+            name: data.body.tracks.items[iItem].name,
+            artistName: artists[iArtist],
+          }))
+        }
+      }
+    }
+    return Promise.all(promises)
+  })
+  .then(() => {
+    console.log("It worked for " + artists[iArtist])
+    if (iArtist+1 < artists.length) {
+      setTimeout(() => {
+        saveSongsFromArtist(iArtist+1)
+      }, 500)
+    }
+    else {
+      mongoose.disconnect()
+    }
+  })
 }
 
-let artistList=uniq(artList);
+spotifyApi.clientCredentialsGrant()
+  .then(function(data) {
+    spotifyApi.setAccessToken(data.body['access_token']);
+    Song.deleteMany()
+    .then(() => {
+      saveSongsFromArtist()
+      // mongoose.disconnect();
+    })
+    .catch(err => console.log(err))
+  }, function(err) {
+    console.log('Something went wrong when retrieving an access token', err);
+});
 
-
-
-
-module.exports=artistList;
