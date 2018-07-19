@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const passportLocalMongoose = require('passport-local-mongoose');
 const { Schema } = mongoose;
 
 const songSchema = new Schema({

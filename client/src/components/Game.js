@@ -92,7 +92,7 @@ class Game extends Component {
 
         <h3>Score : {this.state.score}</h3>
 
-        <ReactAudioPlayer src={url} controls/> <br/><br/>
+        <ReactAudioPlayer autoPlay={true} src={url} controls/> <br/><br/>
         <Button color={this.getColor(0)} onClick={() => this.onRadioBtnClick(0)} active={this.state.rSelected === 1} >
           {answer}</Button><br/><br/>
         <Button color={this.getColor(1)} onClick={() => this.onRadioBtnClick(1)} active={this.state.rSelected === 2}>

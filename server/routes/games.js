@@ -4,8 +4,8 @@ const Song = require('../models/Song')
 const SpotifyWebApi = require('spotify-web-api-node');
 
 var router = express.Router();
-var artistList = require('../bin/seeds');
-var helper=require('../helpers/helper');
+// var artistList = require('../bin/seeds');
+// var helper=require('../helpers/helper');
 
 
 const clientId = '774af390dd2142dcadfcccc52d3e22c3',
@@ -27,46 +27,38 @@ spotifyApi.clientCredentialsGrant()
 
 
 
-function randomTrack(){
-  let random=Math.floor(Math.random()*5);
-  return random;
-}
-let corRand=randomTrack();
-
-
-
-
-router.get('/random-old', (req, res, next) => {
-  let promises = []
-  for (let i = 0; i < 10; i++) {
-    promises.push(helper.getOneRandomQuestion(spotifyApi))
-  }
-  Promise.all(promises)
-  .then(questions => {
-    let game = { 
-      questions: questions
-    }
+// router.get('/random-old', (req, res, next) => {
+//   let promises = []
+//   for (let i = 0; i < 10; i++) {
+//     promises.push(helper.getOneRandomQuestion(spotifyApi))
+//   }
+//   Promise.all(promises)
+//   .then(questions => {
+//     let game = { 
+//       questions: questions
+//     }
     
     
-    for (let i = 0; i < questions.length; i++) {
-      if(game.questions[i])
-        helper.shuffle(game.questions[i].answers)
-    }
-    return Game.create(game)
-  })
-  .then(gameCreated => {
-    res.json(gameCreated)
-  })
-  .catch((err) => {
-    console.log('Something went wrong!', err);
-    next(err)
-  })
-});
+//     for (let i = 0; i < questions.length; i++) {
+//       if(game.questions[i])
+//         helper.shuffle(game.questions[i].answers)
+//     }
+//     return Game.create(game)
+//   })
+//   .then(gameCreated => {
+//     res.json(gameCreated)
+//   })
+//   .catch((err) => {
+//     console.log('Something went wrong!', err);
+//     next(err)
+//   })
+// });
 
 
 router.get('/random', (req, res, next) => {
   Song.find()
   .then(songs => {
+    console.log("Display songs =>", songs)
     songs.sort((a,b) => Math.random()-0.5) // To shuffle
     console.log(songs.map(song => song.artistName + " --- " + song.name));
 

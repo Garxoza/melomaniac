@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import backGround from '../bg1.jpg';
+import backGround from '../bg3.jpg';
 import {Button, ButtonGroup} from 'reactstrap';
 import { Route, Link, Switch } from 'react-router-dom';
 import api from '../api';
@@ -21,17 +21,17 @@ class Home extends Component {
     return (
       <div className="container" >
       <ButtonGroup>
-      <Button onClick={this.handleClickRandom.bind(this)}  color="secondary" size="lg">Random Game</Button> <br/><br/>
-      <Button tag={Link} to ="/games"   color="secondary" size="lg">Challenge Game</Button> <br/><br/>
-      <Button tag={Link} to ="/games"   color="secondary" size="lg">Custom Game</Button> <br/><br/>
-      <Button tag={Link} to ="/games"   color="secondary" size="lg">Leaderboard</Button> <br/><br/>
+      <Button onClick={this.handleClickRandom.bind(this)}  color="secondary" size="lg"><font face="georgia" size="10">Play Now</font></Button> <br/><br/>
+      {/* <Button tag={Link} to ="/games"   color="secondary" size="lg">Challenge Game</Button> <br/><br/>
+      <Button tag={Link} to ="/games"   color="secondary" size="lg">Custom Game</Button> <br/><br/> */}
+      {/* <Button tag={Link} to ="/games"   color="secondary" size="lg">Leaderboard</Button> <br/><br/> */}
 
       </ButtonGroup>
      
-        <div className="Home">
-          <h2>Melomaniac</h2>
+        {/* <div className="Home">
+          <h2><font face="georgia">Melomaniac</font></h2>
           
-       </div>
+       </div> */}
        <img className="d-block w-100" src={backGround} />
 
       </div>

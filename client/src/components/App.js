@@ -15,7 +15,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      countries: []
+      games: []
     }
     api.loadUser();
   }
@@ -33,6 +33,7 @@ class App extends Component {
       <Navbar className="navbar navbar-expand-sm" color="primary" dark expand="md">
         <div className="container">
          <NavbarBrand  href="/"><img src={logo} className="App-logo" alt="logo" /></NavbarBrand>
+         <h2><font face="courier"size="10">Melomaniac</font></h2>
          {/* <NavbarBrand  href="/games">Games</NavbarBrand> */}
          <div className="btn-group btn-group-toggle">
            {!api.isLoggedIn() && <NavbarBrand className="ml-auto" href="/signup">Signup</NavbarBrand> }<br/>

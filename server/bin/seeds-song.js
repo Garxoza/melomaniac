@@ -181,7 +181,7 @@ function saveSongsFromArtist(iArtist = 0) {
     if (iArtist+1 < artists.length) {
       setTimeout(() => {
         saveSongsFromArtist(iArtist+1)
-      }, 500)
+      }, 200)
     }
     else {
       mongoose.disconnect()
