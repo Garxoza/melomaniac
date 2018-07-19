@@ -2,6 +2,9 @@ var express = require('express');
 const Game = require('../models/Game')
 const Song = require('../models/Song')
 const SpotifyWebApi = require('spotify-web-api-node');
+const passport = require('passport');
+const jwt = require('jwt-simple');
+const config = require('../configs/index');
 
 var router = express.Router();
 // var artistList = require('../bin/seeds');
@@ -107,7 +110,19 @@ router.get('/random', (req, res, next) => {
 
 router.get('/:gameId', (req, res, next) => {
   Game.findById(req.params.gameId)
+  .populate("players._users")
   .then(games => res.json(games))
+})
+
+
+router.post('/:gameId/score', passport.authenticate("jwt", config.jwtSession), (req, res, next) => {
+  let {score} = req.body
+  let elementPushed = {
+    _user: req.user._id,
+    score
+  }
+  Game.findByIdAndUpdate(req.params.gameId, {$push: { players: elementPushed}})
+  .then(game => res.json(game))
 })
 
 

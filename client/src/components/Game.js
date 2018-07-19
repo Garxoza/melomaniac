@@ -3,8 +3,10 @@ import axios from "axios";
 import api from '../api';
 import ReactAudioPlayer from 'react-audio-player';
 import {Button, ButtonGroup} from 'reactstrap';
-
-
+import pic3 from '../pic3.jpg';
+import bg2 from '../bg2.jpg';
+import { Progress } from 'reactstrap';
+import { Route, Link, Switch } from 'react-router-dom';
 
 class Game extends Component {
   constructor(props){
@@ -15,36 +17,39 @@ class Game extends Component {
       isShowQuestion: true,
       questionIndex: 0,
       score: 0,
-      
+      beginnigTime: Date.now()
     };
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
   }
+  
+
   onRadioBtnClick(iBtn) {
+    
+
+    let currentTime = Date.now()
+    let nbOfSeconds = Math.round((currentTime - this.state.beginnigTime) / 1000 ) 
+
     let newScore = this.state.score
     if (this.state.game.questions[this.state.questionIndex].answers[iBtn].isCorrect)
-      newScore += 100
+      newScore += 100 - Math.min(nbOfSeconds, 30)
     this.setState({
       isShowQuestion: false,
-      score: newScore
-    });
+      score: newScore,
+      });
     
     this.setState({iBtn});
-    console.log("Button Index is ", iBtn)
   }
-
-  // handleClickNext() {
-  //   this.setState({
-  //     questionIndex: this.state.questionIndex+1,
-  //     isShowQuestion: true
-  //   });
-  // }
 
   loadNextQuestion() {
     setTimeout(()=>{
+      if (this.state.questionIndex+1 === 10) {
+        api.saveGameScore(this.props.match.params.gameId, this.state.score)
+      }
       this.setState({
         questionIndex: this.state.questionIndex+1,
         iBtn: 4,
-        isShowQuestion: true
+        isShowQuestion: true,
+        beginnigTime: Date.now()
       });
     },1000)
   }
@@ -70,27 +75,29 @@ class Game extends Component {
     return "danger"
   }
 
-  // getColor(i) {
-  //    if (this.state.isShowQuestion)
-  //     return "primary"
-  //   if (this.state.game.questions[this.state.questionIndex].answers[i].isCorrect)
-  //     return "success"
-  //   if (!this.state.game.questions[this.state.questionIndex].answers[i].isCorrect && this.state.rSelected===i+1)
-  //     return "danger"
-  //   return "primary"
-  // }
 
   render() {
     if (!this.state.game)
       return "Loading..."
 
-
+    let bestScore = this.state.game.players.reduce((max, val) => Math.max(max, val.score), 0)
+    console.log("GAME", this.state.game);
+    console.log("bestScore", bestScore);
+    
     
     if (this.state.questionIndex >= this.state.game.questions.length) {
+
       return (
-        <div>
-          <h1>It's over</h1>
-          <h3>Score : {this.state.score}</h3>
+        <div className = "container">
+          
+          <h3>Your Score is: {this.state.score}</h3>
+          <h3>Previous best score : {bestScore}</h3>
+          <h3>
+          <font face="georgia" size="5"color="secondary"> Share this same game with your friends: </font> </h3>
+          <font face="georgia" size="2"color="secondary"> {window.location.href} </font><br/>
+
+          
+          <img src={bg2} className="d-block w-100" alt="pic" />
         </div>
       )
     }
@@ -107,7 +114,9 @@ class Game extends Component {
 
     return (
       <div>
-       
+      <div className="container mt-4" >
+             <Progress value={this.state.questionIndex} max="10" />
+      </div>
         <h3><font face="courier"size="5"color="success">Score : {this.state.score}</font></h3>
 
         <ReactAudioPlayer autoPlay={true} src={url} controls/> <br/><br/>
@@ -120,10 +129,7 @@ class Game extends Component {
         <Button color={this.getColor(3)} onClick={() => this.onRadioBtnClick(3)}  >
           {answer4}</Button>
           <br/><br/>
-          
-        
-        {/* {!this.state.isShowQuestion && <Button color="primary" onClick={this.handleClickNext.bind(this)}>Next</Button>} */}
-
+         <img src={pic3} className="pic" alt="pic" />
         {this.state.iBtn<4 && this.loadNextQuestion.call(this)}
                 
 

@@ -41,6 +41,13 @@ export default {
       .then(res => res.data)
       .catch(errHandler);
   },
+
+  saveGameScore(gameId, score) {
+    return service
+      .post(`/games/${gameId}/score`, {score})
+      .then(res => res.data)
+      .catch(errHandler);
+  },
   
   signup(userInfo) {
     return service
