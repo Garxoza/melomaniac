@@ -187,6 +187,7 @@ function saveSongsFromArtist(iArtist = 0) {
       mongoose.disconnect()
     }
   })
+  .catch(err => console.log(err))
 }
 
 spotifyApi.clientCredentialsGrant()
@@ -200,5 +201,6 @@ spotifyApi.clientCredentialsGrant()
     .catch(err => console.log(err))
   }, function(err) {
     console.log('Something went wrong when retrieving an access token', err);
-});
+})
+.catch(err => console.log(err));
 
