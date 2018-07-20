@@ -30,32 +30,6 @@ spotifyApi.clientCredentialsGrant()
 
 
 
-// router.get('/random-old', (req, res, next) => {
-//   let promises = []
-//   for (let i = 0; i < 10; i++) {
-//     promises.push(helper.getOneRandomQuestion(spotifyApi))
-//   }
-//   Promise.all(promises)
-//   .then(questions => {
-//     let game = { 
-//       questions: questions
-//     }
-    
-    
-//     for (let i = 0; i < questions.length; i++) {
-//       if(game.questions[i])
-//         helper.shuffle(game.questions[i].answers)
-//     }
-//     return Game.create(game)
-//   })
-//   .then(gameCreated => {
-//     res.json(gameCreated)
-//   })
-//   .catch((err) => {
-//     console.log('Something went wrong!', err);
-//     next(err)
-//   })
-// });
 
 
 router.get('/random', (req, res, next) => {

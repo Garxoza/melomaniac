@@ -51,7 +51,7 @@ class Game extends Component {
         isShowQuestion: true,
         beginnigTime: Date.now()
       });
-    },1000)
+    },1200)
   }
 
   componentDidMount() {
@@ -120,13 +120,13 @@ class Game extends Component {
         <h3><font face="courier"size="5"color="success">Score : {this.state.score}</font></h3>
 
         <ReactAudioPlayer autoPlay={true} src={url} controls/> <br/><br/>
-        <Button color={this.getColor(0)} onClick={() => this.onRadioBtnClick(0)}  >
+        <Button color={this.getColor(0)} onClick={() => this.onRadioBtnClick(0)}  active ="true" >
           {answer}</Button><br/><br/>
-        <Button color={this.getColor(1)} onClick={() => this.onRadioBtnClick(1)} >
+        <Button color={this.getColor(1)} onClick={() => this.onRadioBtnClick(1)} active ="true" >
           {answer2}</Button><br/><br/>
-        <Button color={this.getColor(2)} onClick={() => this.onRadioBtnClick(2)} >
+        <Button color={this.getColor(2)} onClick={() => this.onRadioBtnClick(2)} active ="true">
           {answer3}</Button><br/><br/>
-        <Button color={this.getColor(3)} onClick={() => this.onRadioBtnClick(3)}  >
+        <Button color={this.getColor(3)} onClick={() => this.onRadioBtnClick(3)} active ="true" >
           {answer4}</Button>
           <br/><br/>
          <img src={pic3} className="pic" alt="pic" />
